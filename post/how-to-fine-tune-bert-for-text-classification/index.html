@@ -1,24 +1,139 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://kesblog.github.io</id>
-    <title>KesBlog</title>
-    <updated>2019-08-26T14:03:21.963Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://kesblog.github.io"/>
-    <link rel="self" href="https://kesblog.github.io/atom.xml"/>
-    <subtitle>Every 🐦 has an 🦅&apos;s dream.</subtitle>
-    <logo>https://kesblog.github.io/images/avatar.png</logo>
-    <icon>https://kesblog.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2019, KesBlog</rights>
-    <entry>
-        <title type="html"><![CDATA[How to Fine-Tune BERT for Text Classification]]></title>
-        <id>https://kesblog.github.io/post/how-to-fine-tune-bert-for-text-classification</id>
-        <link href="https://kesblog.github.io/post/how-to-fine-tune-bert-for-text-classification">
-        </link>
-        <updated>2019-08-26T10:26:16.000Z</updated>
-        <summary type="html"><![CDATA[<p>预训练语言模型在学习通用的语言表示方面被证明是有用的。作为SOTA的预训练语言模型，BERT在许多语言理解任务中取得了很好的许熬过。在这篇文章中，我们进行了详细的实验来探索不同的BERT在文本分类上的fine-tuning方法，并且提出了一个BERT fine-tuning的通用方案。最终，提出的新方案在8个广泛研究的文本分类数据机上取得了SOTA的结果。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>预训练语言模型在学习通用的语言表示方面被证明是有用的。作为SOTA的预训练语言模型，BERT在许多语言理解任务中取得了很好的许熬过。在这篇文章中，我们进行了详细的实验来探索不同的BERT在文本分类上的fine-tuning方法，并且提出了一个BERT fine-tuning的通用方案。最终，提出的新方案在8个广泛研究的文本分类数据机上取得了SOTA的结果。</p>
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KesBlog</title>
+<meta name="description" content="Every 🐦 has an 🦅's dream." />
+<link rel="shortcut icon" href="https://kesblog.github.io/favicon.ico?v=1566828180854">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://kesblog.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="KesBlog - Atom Feed" href="https://kesblog.github.io/atom.xml">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://kesblog.github.io">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://kesblog.github.io/images/avatar.png?v=1566828180854" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">KesBlog</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%BB%8B%E7%BB%8D">介绍</a></li>
+<li><a href="#%E7%9B%B8%E5%85%B3%E5%B7%A5%E4%BD%9C">相关工作</a>
+<ul>
+<li><a href="#%E9%A2%84%E8%AE%AD%E7%BB%83%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B">预训练语言模型</a></li>
+<li><a href="#%E5%A4%9A%E4%BB%BB%E5%8A%A1%E5%AD%A6%E4%B9%A0">多任务学习</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BD%BF%E7%94%A8bert%E8%BF%9B%E8%A1%8C%E6%96%87%E6%9C%AC%E5%88%86%E7%B1%BB">使用BERT进行文本分类</a></li>
+<li><a href="#%E6%96%B9%E6%B3%95">方法</a>
+<ul>
+<li><a href="#fine-tuning-%E7%AD%96%E7%95%A5">Fine-Tuning 策略</a></li>
+<li><a href="#%E8%BF%9B%E4%B8%80%E6%AD%A5%E9%A2%84%E8%AE%AD%E7%BB%83">进一步预训练</a></li>
+<li><a href="#%E5%A4%9A%E4%BB%BB%E5%8A%A1fine-tuning">多任务Fine-Tuning</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AE%9E%E9%AA%8C">实验</a>
+<ul>
+<li><a href="#%E6%95%B0%E6%8D%AE%E9%9B%86">数据集</a></li>
+<li><a href="#%E8%B6%85%E5%8F%82%E6%95%B0">超参数</a></li>
+<li><a href="#%E5%AE%9E%E9%AA%8C-1%E6%8E%A2%E7%B4%A2%E4%B8%8D%E5%90%8Cfine-tuning%E7%AD%96%E7%95%A5">实验-1：探索不同Fine-Tuning策略</a>
+<ul>
+<li><a href="#%E5%A4%84%E7%90%86%E9%95%BF%E6%96%87%E6%9C%AC">处理长文本</a>
+<ul>
+<li><a href="#%E5%B1%82%E6%AC%A1%E6%96%B9%E6%B3%95">层次方法</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%8D%E5%90%8C%E5%B1%82%E7%9A%84%E7%89%B9%E5%BE%81">不同层的特征</a></li>
+<li><a href="#%E7%81%BE%E9%9A%BE%E6%80%A7%E9%81%97%E5%BF%98">灾难性遗忘</a></li>
+<li><a href="#%E5%B1%82%E6%AC%A1%E9%97%B4%E5%AD%A6%E4%B9%A0%E7%8E%87%E8%A1%B0%E9%80%80">层次间学习率衰退</a></li>
+<li><a href="#within-task-%E8%BF%9B%E4%B8%80%E6%AD%A5%E9%A2%84%E8%AE%AD%E7%BB%83">Within-Task 进一步预训练</a></li>
+<li><a href="#in-domain%E5%92%8Ccross-domain-%E8%BF%9B%E4%B8%80%E6%AD%A5%E9%A2%84%E8%AE%AD%E7%BB%83">In-Domain和Cross-Domain 进一步预训练</a></li>
+<li><a href="#%E5%90%8C%E4%B9%8B%E5%89%8D%E7%9A%84%E6%A8%A1%E5%9E%8B%E8%BF%9B%E8%A1%8C%E6%AF%94%E8%BE%83">同之前的模型进行比较</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AE%9E%E9%AA%8C-3%E5%A4%9A%E4%BB%BB%E5%8A%A1fine-tuning">实验-3：多任务Fine-Tuning</a></li>
+<li><a href="#%E5%AE%9E%E9%AA%8C-4%E5%B0%8F%E6%A0%B7%E6%9C%AC%E5%AD%A6%E4%B9%A0">实验-4：小样本学习</a></li>
+<li><a href="#%E5%AE%9E%E9%AA%8C-5%E5%9C%A8bert-large%E4%B8%8A%E8%BF%9B%E4%B8%80%E6%AD%A5%E9%A2%84%E8%AE%AD%E7%BB%83">实验-5：在BERT-Large上进一步预训练</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BB%93%E8%AE%BA">结论</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="remixicon-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a></div>
+    <a class="rss" href="https://kesblog.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">How to Fine-Tune BERT for Text Classification</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2019-08-26 / 6 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://kesblog.github.io/post-images/how-to-fine-tune-bert-for-text-classification.png" alt="">
+        
+        <div class="post-content yue">
+          <p>预训练语言模型在学习通用的语言表示方面被证明是有用的。作为SOTA的预训练语言模型，BERT在许多语言理解任务中取得了很好的许熬过。在这篇文章中，我们进行了详细的实验来探索不同的BERT在文本分类上的fine-tuning方法，并且提出了一个BERT fine-tuning的通用方案。最终，提出的新方案在8个广泛研究的文本分类数据机上取得了SOTA的结果。</p>
 <!-- more -->
 <h2 id="介绍">介绍</h2>
 <p>文本分类是NLP中的经典任务，之前的做法有CNN、RNN和Attention mechanisms。</p>
@@ -160,6 +275,129 @@
 <li>BERT可以小规模数据集任务的性能。</li>
 </ol>
 <p>通过以上的发现，我们在8个广泛研究的文本分类数据集上取得了SOTA的成绩。未来，我们将会在BERT是如何工作的方面进行深入探索。</p>
-]]></content>
-    </entry>
-</feed>
+
+        </div>
+
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://kesblog.github.io/tag/nlp">
+            <span class="flex-auto">NLP</span>
+          </a>
+        
+          <a class="animated fadeInUp p-2 items-center text-sm text-gray-700 border hover:bg-gray-300 leading-none rounded-full flex lg:inline-flex m-4 " href="https://kesblog.github.io/tag/lun-wen-bi-ji">
+            <span class="flex-auto">论文笔记</span>
+          </a>
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+        </div>
+
+        
+
+      </div>
+    </div>
+
+    <script src="https://kesblog.github.io/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
