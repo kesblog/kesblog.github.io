@@ -1,24 +1,129 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://kesblog.github.io</id>
-    <title>KesBlog</title>
-    <updated>2019-08-29T14:21:47.973Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://kesblog.github.io"/>
-    <link rel="self" href="https://kesblog.github.io/atom.xml"/>
-    <subtitle>Every 🐦 has an 🦅&apos;s dream.</subtitle>
-    <logo>https://kesblog.github.io/images/avatar.png</logo>
-    <icon>https://kesblog.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2019, KesBlog</rights>
-    <entry>
-        <title type="html"><![CDATA[Extracting Multiple-Relations in One-Pass with Pre-Trained Transformers]]></title>
-        <id>https://kesblog.github.io/post/extracting-multiple-relations-in-one-pass-with-pre-trained-transformers</id>
-        <link href="https://kesblog.github.io/post/extracting-multiple-relations-in-one-pass-with-pre-trained-transformers">
-        </link>
-        <updated>2019-08-29T10:12:38.000Z</updated>
-        <summary type="html"><![CDATA[<p>目前SOTA的进行多对实体关系抽取的方法要求进行多轮对输入的编码。这篇论文提出了一个新的方案，可以在一轮对输入的编码后完成多个实体关系的抽取，并且在ACE 2005上取得了SOTA的准确率表现。我们的方案构建在预训练的Transformer模型上面。因为我们的方案使用一轮编码来计算出所有的关系，所以可以轻松的一直到大的数据库上，从而在实际应用中更有用。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>目前SOTA的进行多对实体关系抽取的方法要求进行多轮对输入的编码。这篇论文提出了一个新的方案，可以在一轮对输入的编码后完成多个实体关系的抽取，并且在ACE 2005上取得了SOTA的准确率表现。我们的方案构建在预训练的Transformer模型上面。因为我们的方案使用一轮编码来计算出所有的关系，所以可以轻松的一直到大的数据库上，从而在实际应用中更有用。</p>
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KesBlog</title>
+<meta name="description" content="Every 🐦 has an 🦅's dream." />
+<link rel="shortcut icon" href="https://kesblog.github.io/favicon.ico?v=1567088503155">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+
+<link rel="stylesheet" href="https://kesblog.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="KesBlog - Atom Feed" href="https://kesblog.github.io/atom.xml">
+
+
+
+  </head>
+  <body>
+    <div id="app" class="main px-4 flex flex-col lg:flex-row">
+      <div id="sidebar" class="sidebar-wrapper lg:static lg:w-1/4">
+  <div class="lg:sticky top-0">
+    <div class="sidebar-content">
+      <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
+        <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
+        <a href="https://kesblog.github.io">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://kesblog.github.io/images/avatar.png?v=1567088503155" alt="">
+        </a>
+        <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">KesBlog</h1>
+      </div>
+      
+        <div class="animated fadeInLeft" style="animation-delay: 0.4s">
+          <p class="my-4 text-gray-600 font-light hidden lg:block">
+            文章目录
+          </p>
+          <div class="toc-container hidden lg:block">
+            <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%BB%8B%E7%BB%8D">介绍</a></li>
+<li><a href="#%E8%83%8C%E6%99%AF">背景</a></li>
+<li><a href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">解决方案</a>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8%E5%B8%A6%E7%BB%93%E6%9E%84%E5%8C%96%E9%A2%84%E6%B5%8B%E7%9A%84bert%E8%BF%9B%E8%A1%8Cmre">使用带结构化预测的BERT进行MRE</a></li>
+<li><a href="#%E5%9F%BA%E4%BA%8E%E7%9B%B8%E5%AF%B9%E8%B7%9D%E7%A6%BB%E7%9A%84-entity-aware-self-attention">基于相对距离的 Entity-Aware Self-Attention</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AE%9E%E9%AA%8C">实验</a>
+<ul>
+<li><a href="#%E8%AE%BE%E5%AE%9A">设定</a>
+<ul>
+<li><a href="#%E6%95%B0%E6%8D%AE">数据</a></li>
+<li><a href="#%E6%96%B9%E6%B3%95">方法</a></li>
+<li><a href="#%E8%B6%85%E5%8F%82%E6%95%B0">超参数</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9C%A8ace-2005%E4%B8%8A%E7%9A%84%E7%BB%93%E6%9E%9C">在ACE 2005上的结果</a>
+<ul>
+<li><a href="#%E4%B8%BB%E8%A6%81%E7%BB%93%E6%9E%9C">主要结果</a></li>
+<li><a href="#%E5%A4%9A%E8%BD%AEmre%E5%92%8C%E5%8D%95%E8%BD%AEmre%E4%B9%8B%E9%97%B4%E7%9A%84%E8%A1%A8%E7%8E%B0%E5%B7%AE%E8%B7%9D">多轮MRE和单轮MRE之间的表现差距</a></li>
+<li><a href="#%E8%AE%AD%E7%BB%83%E5%92%8C%E9%A2%84%E6%B5%8B%E6%97%B6%E9%97%B4">训练和预测时间</a></li>
+<li><a href="#%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9D%97%E9%80%89%E6%8B%A9">预测模块选择</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9C%A8semeval-2008-task-7%E4%B8%8A%E7%9A%84%E7%BB%93%E6%9E%9C">在SemEval 2008 Task 7上的结果</a></li>
+<li><a href="#%E9%A2%9D%E5%A4%96%E7%9A%84sre%E7%BB%93%E6%9E%9C">额外的SRE结果</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BB%93%E8%AE%BA">结论</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+
+<div class="menu-container">
+  <i class="remixicon-arrow-left-line text-2xl cursor-pointer animated fadeIn close-menu-btn" onclick="closeMenu()"></i>
+  <div>
+    
+      
+        <a href="/" class="menu" style="animation-delay: 0s">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu" style="animation-delay: 0.2s">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu" style="animation-delay: 0.4s">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu" style="animation-delay: 0.6000000000000001s">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="site-footer">
+    <div class="py-4 text-gray-700">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a></div>
+    <a class="rss" href="https://kesblog.github.io/atom.xml" target="_blank">RSS</a>
+  </div>
+</div>
+<div class="mask" onclick="closeMenu()">
+</div>
+      <div class="content-wrapper py-32 lg:p-8 lg:w-3/4 post-detail animated fadeIn">
+        <h1 class="text-3xl font-bold lg:mt-16">Extracting Multiple-Relations in One-Pass with Pre-Trained Transformers</h1>
+        <div class="text-sm text-gray-700 lg:my-8">
+          2019-08-29 / 24 min read
+        </div>
+        
+          <img class="post-feature-image rounded-lg mx-auto my-4" src="https://kesblog.github.io/post-images/extracting-multiple-relations-in-one-pass-with-pre-trained-transformers.png" alt="">
+        
+        <div class="post-content yue">
+          <p>目前SOTA的进行多对实体关系抽取的方法要求进行多轮对输入的编码。这篇论文提出了一个新的方案，可以在一轮对输入的编码后完成多个实体关系的抽取，并且在ACE 2005上取得了SOTA的准确率表现。我们的方案构建在预训练的Transformer模型上面。因为我们的方案使用一轮编码来计算出所有的关系，所以可以轻松的一直到大的数据库上，从而在实际应用中更有用。</p>
 <!-- more -->
 <h2 id="介绍">介绍</h2>
 <p>关系抽取（RE）的目标是从输入的段落中找到一堆实体之间的语义关系。该任务对于许多下游NLP是非常重要的，比如基于知识的自动完成，基于知识的问答等等。</p>
@@ -107,281 +212,130 @@ s76,-59,76,-59s76,-60,76,-60z M1001 80H40000v40H1012z'/></svg></span></span></sp
 <p>在这个单关系抽取任务上，现成的BERT经过fine-tuning，取得了合理的结果。加上entity-aware 注意力之后，因为编码过程中的实体信息的可用性，有着8%的提高。在BERT上加上结构化预测层之后，也导致了相似的提高程度。然而，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>B</mi><mi>E</mi><mi>R</mi><msub><mi>T</mi><mrow><mi>S</mi><mi>P</mi></mrow></msub></mrow><annotation encoding="application/x-tex">BERT_{SP}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord mathdefault" style="margin-right:0.05017em;">B</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05764em;">S</span><span class="mord mathdefault mtight" style="margin-right:0.13889em;">P</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 中，有没有entity-aware 注意力层的差距很小。这可能是因为数据分布的偏差：只有两个目标实体存在的假设，让这两个方法有着相似的效果。</p>
 <h2 id="结论">结论</h2>
 <p>我们提出了一个同类解决方案中的第一个可以在将输入文本进行一轮编码就可以同时提取多个关系的MRE任务的解决方案。通过给BERT顶端加上我们提出的结构化预测和entity-aware注意力层，我们在ACE 2015基准上面高效的取得了一个新的SOTA成绩。我们的考虑多个实体对文章进行编码的方法，有着在关系抽取之外更加广泛的潜在应用，比如在在问答中以实体为中心的文章编码。在以后的工作中，我们将会探索该方法在其他方面的应用。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Entity-Relation Extraction as Multi-turn Question Answering]]></title>
-        <id>https://kesblog.github.io/post/entity-relation-extraction-as-multi-turn-question-answering</id>
-        <link href="https://kesblog.github.io/post/entity-relation-extraction-as-multi-turn-question-answering">
-        </link>
-        <updated>2019-08-27T11:13:52.000Z</updated>
-        <summary type="html"><![CDATA[<p>在这篇文章中，我们提出了一个新的实体关系抽取的范式。我们将这个任务转换成多轮问答问题，也就是说，将实体关系抽取任务转换成从文章中寻找问题答案的任务。这个多轮对话形式带来了一些关键的优势：首先，问题编码了我们想识别的实体关系类别的重要信息；然后，QA问题是一种联合建模实体和关系的自然的方法；最后，它可以让我们利用良好发展的机器阅读理解(MRC)模型。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>在这篇文章中，我们提出了一个新的实体关系抽取的范式。我们将这个任务转换成多轮问答问题，也就是说，将实体关系抽取任务转换成从文章中寻找问题答案的任务。这个多轮对话形式带来了一些关键的优势：首先，问题编码了我们想识别的实体关系类别的重要信息；然后，QA问题是一种联合建模实体和关系的自然的方法；最后，它可以让我们利用良好发展的机器阅读理解(MRC)模型。</p>
-<!-- more -->
-<p>在ACE和CoNLL04语料库上的实验显示我们的模型比之前的模型效果好。我们在ACE04、ACE05和CoNLL04数据集上取得了SOTA的成绩，分别将SOTA成绩提高到了49.4 (+1.0)、60.2 (+0.6) 和 68.9 (+2.1)。</p>
-<p>此外，我们新构建了一个中文简历数据集 <strong>RESUME</strong>，要求多步推理来构建实体以来，和之前的只需要单步数据集不同。我们提出的多轮 QA模型在 RESUME 数据集上取得了最好的表现。</p>
-<h2 id="介绍">介绍</h2>
-<p>实体关系抽取最近越来越火热。要求将一段自然语言转换成结构化的知识。比如给一下文字：</p>
-<blockquote>
-<p>In 2002, Musk founded SpaceX, an aerospace manufacturer and space transport services Company, of which he is CEO and lead designer. He helped fund Tesla, Inc., an electric vehicle and so- lar panel manufacturer, in 2003, and became its CEO and product architect. In 2006, he inspired the creation of SolarCity, a solar energy services Company, and operates as its chairman. In 2016, he co-founded Neuralink, a neurotechnology Com- pany focused on developing brain–computer inter- faces, and is its CEO. In 2016, Musk founded The Boring Company, an infrastructure and tunnel- construction Company.</p>
-</blockquote>
-<p>我们需要提取四种不同的实体：Person，Company，Time 和 Position，三种类型的关系：FOUND，FOUNDING-TIME 和 SERVING-ROLE。这些文字被转化成结构化数据集，如表1所示：<br>
-<img src="https://kesblog.github.io/post-images/1566905501587.png" alt=""></p>
-<p>许多已存在的模型通过提取三元组列表来解决该任务，比如：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">REL</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><msub><mi>e</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>e</mi><mn>2</mn></msub><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\operatorname{REL}\left(e_{1}, e_{2}\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop"><span class="mord mathrm">R</span><span class="mord mathrm">E</span><span class="mord mathrm">L</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span>，表示实体 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>e</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">e_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>e</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">e_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，之间存在关系<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">REL</mi><mo>⁡</mo></mrow><annotation encoding="application/x-tex">\operatorname{REL}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mop"><span class="mord mathrm">R</span><span class="mord mathrm">E</span><span class="mord mathrm">L</span></span></span></span></span>，之前的模型大多有两种类型：</p>
-<ul>
-<li>首先使用标注模型检测实体，然后使用关系抽取模型来识别每对实体之间的关系</li>
-<li>联合方法，使用不同的策略，比如限制或者参数共享，将实体模型和关系模型结合起来。</li>
-</ul>
-<p>这些问题有着一些问题，全部涉及到问题形式化和算法两个方面：</p>
-<ul>
-<li>从形式化层面来说，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">REL</mi><mo>⁡</mo><mrow><mo fence="true">(</mo><msub><mi>e</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>e</mi><mn>2</mn></msub><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\operatorname{REL}\left(e_{1}, e_{2}\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop"><span class="mord mathrm">R</span><span class="mord mathrm">E</span><span class="mord mathrm">L</span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">(</span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">)</span></span></span></span></span> 三元组结构不能完全表达问题背后的关系。拿之前的 <em>Musk</em> 为例，这些标签之间有着层级关系：Time的抽取依赖着Position，因为一个Person可以担任不同的Position在不同的Time，Position的抽取也依赖着Company，因为一个Person可以为多个Company工作。</li>
-<li>从算法层面来说，对于现存的关系抽取模型来说，模型的输入是一段文本，带着两个实体标签，输出是两个实体间是否存在该关系。Wang et al.(2016a); Zeng et al(2018) 曾指出，对于神经模型，很难捕捉到这种形式化层面下的语法语义等信息，尤其是当:
-<ul>
-<li>实体距离较远</li>
-<li>一个实体参与多个关系</li>
-<li>关系存在重叠。比如文本 A B C D中，(A，C)是一个对，(B，D)是另一个对。</li>
-</ul>
-</li>
-</ul>
-<p>将实体关系抽取任务当作多轮QA任务有着以下的好处：</p>
-<ul>
-<li>多轮QA的设置提供了编码层次化依赖的两个编码方法。在多轮对话的过程中，我们逐渐获取了下一轮对话所需要的实体信息。有点类似于多轮对话系统中的slot。</li>
-<li>问题编码了我们想识别的关系类的重要先验信息。这些信息有可能解决现存关系抽取模型不能解决的问题，比如实体距离远、关系重叠的问题等等。</li>
-<li>QA框架提供了一种同时抽取实体和关系的自然的方法。大多MRC模型支持输出一个特殊的 <strong>NONE</strong> 标签，表示对于问题没有答案。通过这个，原始的两个任务，实体提取和关系抽取可以被合并为一个单独的QA任务：如果返回的不是 <strong>NONE</strong>，说明关系存在，并且返回的实体正好是我们想要抽取的实体。</li>
-</ul>
-<p>在这篇文章中，我们展示了我们提出的范式，带来了巨大的效果提升。我们也展示了多轮QA的设定可以简单的继承增强学习来获得额外的效果提升。</p>
-<p>第二节：相关工作</p>
-<p>第三节：数据集和设定</p>
-<p>第四节：模型</p>
-<p>第五节：实验结果</p>
-<p>第六节：结论</p>
-<h2 id="相关工作">相关工作</h2>
-<h3 id="提取实体和关系">提取实体和关系</h3>
-<p>许多早期的实体关系抽取模型是流水线的：一个实体抽取模型来抽取感兴趣的实体，然后一个关系抽取模型来构造抽取出的实体之间的关系。</p>
-<p>早起的联合学习模型通过多种依赖来联合两个模型。</p>
-<p>另一种绑定两个模型的方法是使用增强学习或者最小风险训练。</p>
-<h3 id="机器阅读理解">机器阅读理解</h3>
-<p>在这篇文章中，我们提出了一个更加复杂的场景，层次化的依赖需要被建模，但轮QA无法解决。</p>
-<h2 id="数据集和任务">数据集和任务</h2>
-<h3 id="ace04ace05-和-conll04">ACE04，ACE05 和 CoNLL04</h3>
-<p>我们使用被广泛使用的实体关系抽取的ACE04、ACE05和 CoNLL04数据集。</p>
-<p>ACE04定义了7个实体类型，包括 Person(PER)，Organization(ORG)，Geographical Entities(GPE)，Location(LOC)，Facility(FAC)，Weapon(WEA) 和 Vehicle(VEH)。对于每对实体，定义了7种关系，包括：Physical(PHYS)，Person-Social(PER-SON)，Employment-Organization(EMP-ORG)，Agent-Artifact(ART)，PER/ORG Affiliation(OTHER-AFF)，GPE-Affiliation(GPE-AFF) 和 Discourse(DISC)。</p>
-<p>ACE05在ACE04的基础上构建，保存了PER-SOC，ART和GPE-AFF 类别，但是将PHYS划分为PHYS和一个新的PART-WHOLE类别。它也删除了DISC类别，将EMP-ORG和OTHER-AFF合并为一个新的EMP-ORG类别。</p>
-<p>对于CoNLL04数据集，定义了4个实体类别(LOC，ORG，PER 和 OTHERS)，和5个关系类别(LOCATED_IN，WORK_FOR，ORGBASED_IN，LIVE_IN 和 KILL)。</p>
-<h3 id="resume一个新构建的数据集">RESUME：一个新构建的数据集</h3>
-<p>前三个数据集是三元组抽取，两轮对话就足够了。这些数据集不包括我们之前说的层次实体关系抽取例子。</p>
-<p>我们构建了一个新的数据集，叫做 <strong>RESUME</strong>。我们从IPO简介的管理团队描述中，抽取了841段。每段描述了一个经理的工作历程。中文的数据集，样例如下：</p>
-<blockquote>
-<p>郑强先生，本公司监事，1973年出生，中国国籍，无境外永久居留权。1995年，毕业 于南京大学经济管理专业；1995年至1998年， 就职于江苏常州公路运输有限公司，任主办 会计；1998年至2000年，就职于越秀会计师事 务所，任项目经理；2000年至2010年，就职于 国富浩华会计师事务所有限公司广东分所， 历任项目经理、部门经理、合伙人及副主任 会计师；2010年至2011年，就职于广东中科 招商创业投资管理有限责任公司，任副总经 理；2011年至今，任广东中广投资管理有限公 司董事、总经理；2016年至今，任湛江中广创 业投资有限公司董事、总经理；2016年3月至 今，担任本公司监事.</p>
-</blockquote>
-<p>我们识别四种类型实体：Person，Company，Position 和 Time。值得注意的是，一个人可以在不同的时间为不同的公司工作，一个人可以担任不同的职位在同一公司不同时间。</p>
-<h2 id="模型">模型</h2>
-<h3 id="系统总览">系统总览</h3>
-<p>系统总览在算法1中，主要包含了两个步骤。<br>
-<img src="https://kesblog.github.io/post-images/1566909358592.png" alt=""></p>
-<ol>
-<li>头实体抽取步骤(4-9行)：每次多轮QA由一个实体出发，为了抽取开始的实体，我们将每个实体类型转化为一个问题，使用 <strong>EntityQuesTemplates</strong>（第4行），实体 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">e</span></span></span></span> 通过回答问题被抽取（第5行）。如果系统输出 <em>NONE</em> 标签，意味着句子不包含该种类型的实体。</li>
-<li>关系和尾实体抽取阶段(10-24行)：ChainOfRelTemplates定义了一串的关系，我们需要根据这些顺序来进行多轮QA。原因是因为一些实体的抽取依赖着其他的抽取。举个例子，在 <strong>RESUME</strong>数据集中，经理职位实体的抽取依赖着他所在的公司等等。ChainOfRelTemplates 也定义了一些将被填充的槽。为了生成一个问题(14行)，我们将之前抽取的实体填充到模版的槽中。关系<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">REL</mi><mo>⁡</mo></mrow><annotation encoding="application/x-tex">\operatorname{REL}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mop"><span class="mord mathrm">R</span><span class="mord mathrm">E</span><span class="mord mathrm">L</span></span></span></span></span> 和尾实体 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>e</mi></mrow><annotation encoding="application/x-tex">e</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">e</span></span></span></span> 将会联合的被抽取。如果返回 <em>NONE</em>，意味着句子中没有问题的答案。</li>
-</ol>
-<p>值得注意的是，头实体抽取阶段抽取的实体并不都是头实体。在后续的阶段，这些实体先被假设为头实体，如果真的是头实体，QA模型将会通过回答问题来抽取出相应的关系和尾实体，否则返回<em>NONE</em>，该实体将会被忽略。</p>
-<p>对于前三个数据集，两轮QA就足够了，ChainOfRelTemplates包含了1轮，对于 RESUME，需要抽取4个实体，ChainOfRelTemplates包含了3轮。</p>
-<h3 id="使用模版生成问题">使用模版生成问题</h3>
-<p>每个实体类型和由模版生成的类型特定的问题相关连。有两种方法来基于模版生成问题：自然语言问题和伪问题。一个伪问题不一定遵循语法。举例来说：</p>
-<ul>
-<li>自然语言问题：Which fa- cility is mentioned in the text</li>
-<li>伪问题：entity: facility</li>
-</ul>
-<p>在关系和尾实体抽取阶段，问题由模版和之前抽取的头实体生成。问题也可以是一个自然语言问题或者伪问题。例子在表3和表4中展示。<br>
-<img src="https://kesblog.github.io/post-images/1566911094142.png" alt=""></p>
-<p><img src="https://kesblog.github.io/post-images/1566911101076.png" alt=""></p>
-<h3 id="通过mrc来抽取答案">通过MRC来抽取答案</h3>
-<p>在标准的MRC模型中，给定问题 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>Q</mi><mo>=</mo><mrow><mo fence="true">{</mo><msub><mi>q</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>q</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>q</mi><msub><mi>N</mi><mi>q</mi></msub></msub><mo fence="true">}</mo></mrow></mrow><annotation encoding="application/x-tex">Q=\left\{q_{1}, q_{2}, \ldots, q_{N_{q}}\right\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">Q</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.20001em;vertical-align:-0.35001em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size1">{</span></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833100000000004em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.16454285714285716em;"><span style="top:-2.357em;margin-left:-0.10903em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">q</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2818857142857143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.34731999999999996em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size1">}</span></span></span></span></span></span> ，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>N</mi><mi>q</mi></msub></mrow><annotation encoding="application/x-tex">N_q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span> 代表问题 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">Q</span></span></span></span> 的字数，上下文 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>C</mi><mo>=</mo><mrow><mo fence="true">{</mo><msub><mi>c</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>c</mi><mn>2</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>c</mi><msub><mi>N</mi><mi>c</mi></msub></msub><mo fence="true">}</mo></mrow></mrow><annotation encoding="application/x-tex">C=\left\{c_{1}, c_{2}, \ldots, c_{N_{c}}\right\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.0001em;vertical-align:-0.2501em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;">{</span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.16454285714285719em;"><span style="top:-2.357em;margin-left:-0.10903em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">c</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2501em;"><span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;">}</span></span></span></span></span> ，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>N</mi><mi>c</mi></msub></mrow><annotation encoding="application/x-tex">N_c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">c</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 代表 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>C</mi></mrow><annotation encoding="application/x-tex">C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span></span></span></span> 的字数。我们需要预测答案。对于QA框架，我们使用BERT，输入为 [CLS, Q, SEP, C, SEP]。</p>
-<p>传统的MRC模型使用两层softmax来预测起始和结束的位置。但是这种提取策略知识和单答案抽取问题，不适合我们的问题，因为一句话可能包含多个答案。为了解决这个问题，我们将这个问题形式化为一个机遇查询的标注问题。特别的，我们预测对每个 token 预测 BMEO标签。每个单词的表示输入到一层softmax层得到BMEO标签。可以认为我们正在把两个预测开始和结束位置的N类分类问题转化为N个5分类问题。</p>
-<p>在训练阶段，我们联合的训练这两个阶段的目标</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable side="right"><mlabeledtr><mtd><mtext>(1)</mtext></mtd><mtd><mrow><mi mathvariant="script">L</mi><mo>=</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>λ</mi><mo>)</mo><mi mathvariant="script">L</mi><mo>(</mo><mtext> head-entity </mtext><mo>)</mo><mo>+</mo><mi>λ</mi><mi mathvariant="script">L</mi><mo>(</mo><mtext> tail-entity </mtext><mo separator="true">,</mo><mtext> rel </mtext><mo>)</mo></mrow></mtd></mlabeledtr></mtable><annotation encoding="application/x-tex">\mathcal{L}=(1-\lambda) \mathcal{L}(\text { head-entity })+\lambda \mathcal{L}(\text { tail-entity }, \text { rel })  \tag{1}
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord"><span class="mord mathcal">L</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">λ</span><span class="mclose">)</span><span class="mord"><span class="mord mathcal">L</span></span><span class="mopen">(</span><span class="mord text"><span class="mord"> head-entity </span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">λ</span><span class="mord"><span class="mord mathcal">L</span></span><span class="mopen">(</span><span class="mord text"><span class="mord"> tail-entity </span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord text"><span class="mord"> rel </span></span><span class="mclose">)</span></span><span class="tag"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">1</span></span><span class="mord">)</span></span></span></span></span></span></p>
-<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>λ</mi><mo>∈</mo><mo>[</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo>]</mo></mrow><annotation encoding="application/x-tex">\lambda \in[0,1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.73354em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">λ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span> 是两阶段的控制参数。两个模型都适用标准BERT模型初始化。在测试阶段，头实体和尾实体被分别的在两个目标函数上抽取。</p>
-<h3 id="增强学习">增强学习</h3>
-<h2 id="实验">实验</h2>
-<h3 id="resume上的结果">RESUME上的结果</h3>
-<p>如表5中展示，tagging+dependency模型打败了tagging+relation模型，我们提出的多轮QA模型表现的最好，加上增强学习提升了效果。对于提取Person，只需要单轮QA，多轮的QA+RL模型和多轮QA模型表现相同。tagging+relation和tagging+dependency也是一样。<br>
-<img src="https://kesblog.github.io/post-images/1566912635414.png" alt=""></p>
-<h3 id="ace04ace05和conll04上的表现">ACE04，ACE05和CoNLL04上的表现</h3>
-<p>对于ACE04，ACE05和CoNLL04数据集，只需要两轮QA。表6，7，8中展示了micro-F1 分数，准确率和召回率。对于ACE04，多轮QA模型比实体抽取的SOTA高 +1.8%，比关系抽取的SOTA高 +1.0%。对于ACE05，多轮QA模型比实体抽取的SOTA高 +1.2%，关系抽取的SOTA高 +0.6%。对于CoNLL04数据集，提出的多轮QA模型在关系F1上高 +2.1%<br>
-<img src="https://kesblog.github.io/post-images/1566913117581.png" alt=""><br>
-<img src="https://kesblog.github.io/post-images/1566913122500.png" alt=""><br>
-<img src="https://kesblog.github.io/post-images/1566913128449.png" alt=""></p>
-<h2 id="模型简化测试">模型简化测试</h2>
-<h3 id="问题生成策略的影响">问题生成策略的影响</h3>
-<p>我们对比了自然语言问题和伪问题，结果在表9。<br>
-<img src="https://kesblog.github.io/post-images/1566913155926.png" alt=""></p>
-<p>自然语言的F1在所有的数据集上更高。可能是因为自然语言提供了更好的语义信息，对实体关系抽取有帮助。伪问题非常粗糙，可能会误导模型。</p>
-<h3 id="联合学习的影响">联合学习的影响</h3>
-<p>我们将实体关系抽取任务分解成两个子任务：一个提取头实体的多答案任务和一个联合抽取关系和尾实体的单答案任务。我们联合训练这两个模型。<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">λ</span></span></span></span> 控制着这两个模型的取舍。</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable side="right"><mlabeledtr><mtd><mtext>(4)</mtext></mtd><mtd><mrow><mi mathvariant="script">L</mi><mo>=</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>λ</mi><mo>)</mo><mi mathvariant="script">L</mi><mo>(</mo><mtext> head-entity </mtext><mo>)</mo><mo>+</mo><mi>λ</mi><mi mathvariant="script">L</mi><mo>(</mo><mtext> tail-entity </mtext><mo>)</mo></mrow></mtd></mlabeledtr></mtable><annotation encoding="application/x-tex">\mathcal{L}=(1-\lambda) \mathcal{L}(\text { head-entity })+\lambda \mathcal{L}(\text { tail-entity }) \tag{4}
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord"><span class="mord mathcal">L</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">λ</span><span class="mclose">)</span><span class="mord"><span class="mord mathcal">L</span></span><span class="mopen">(</span><span class="mord text"><span class="mord"> head-entity </span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">λ</span><span class="mord"><span class="mord mathcal">L</span></span><span class="mopen">(</span><span class="mord text"><span class="mord"> tail-entity </span></span><span class="mclose">)</span></span><span class="tag"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">4</span></span><span class="mord">)</span></span></span></span></span></span></p>
-<p>不同的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">λ</span></span></span></span> 在ACE05数据集上的结果如下：<br>
-<img src="https://kesblog.github.io/post-images/1566913656585.png" alt=""></p>
-<p>当 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">λ</span></span></span></span> 设置为0时，系统之在头实体预测任务上训练。当 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">λ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 时，没有取得最好的实体抽取结果，这可能是因为第二段的关系抽取对第一阶段的实体抽取有帮助，这更加确定要联合训练这两个任务。对于关系抽取任务，当 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0.7</mn></mrow><annotation encoding="application/x-tex">\lambda=0.7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">λ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">7</span></span></span></span> 时，取得了最好的结果。</p>
-<h3 id="样例学习">样例学习</h3>
-<p>表10对比了我们提出的多轮QA模型和之前的SOTA MRT模型。在第一个例子中，MRT不能识别 <em>john scottsdale</em> 和 <em>iraq</em> 之间的关系，因为两个实体距离太远，但是我们的QA模型可以解决这个问题。<br>
-<img src="https://kesblog.github.io/post-images/1566914060940.png" alt=""></p>
-<p>在第二个例子中，句子包含了两对相同的关系，MRT模型很难识别处理这种情形，无法定位 <em>ship</em> 实体和气对应的关系，然而多轮QA模型可以解决这个问题。</p>
-<h2 id="结论">结论</h2>
-<p>在这篇文章中，我们提出了一个解决实体关系抽取任务的多轮问答范式。我们在3个数据集上取得了SOTA的结果。我们也构建了一个新的实体关系抽取数据集，要求层次关系推理并且提出的模型取得了最好的表现。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[How to Fine-Tune BERT for Text Classification]]></title>
-        <id>https://kesblog.github.io/post/how-to-fine-tune-bert-for-text-classification</id>
-        <link href="https://kesblog.github.io/post/how-to-fine-tune-bert-for-text-classification">
-        </link>
-        <updated>2019-08-26T10:26:16.000Z</updated>
-        <summary type="html"><![CDATA[<p>预训练语言模型在学习通用的语言表示方面被证明是有用的。作为SOTA的预训练语言模型，BERT在许多语言理解任务中取得了很好的许熬过。在这篇文章中，我们进行了详细的实验来探索不同的BERT在文本分类上的fine-tuning方法，并且提出了一个BERT fine-tuning的通用方案。最终，提出的新方案在8个广泛研究的文本分类数据机上取得了SOTA的结果。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>预训练语言模型在学习通用的语言表示方面被证明是有用的。作为SOTA的预训练语言模型，BERT在许多语言理解任务中取得了很好的许熬过。在这篇文章中，我们进行了详细的实验来探索不同的BERT在文本分类上的fine-tuning方法，并且提出了一个BERT fine-tuning的通用方案。最终，提出的新方案在8个广泛研究的文本分类数据机上取得了SOTA的结果。</p>
-<!-- more -->
-<h2 id="介绍">介绍</h2>
-<p>文本分类是NLP中的经典任务，之前的做法有CNN、RNN和Attention mechanisms。</p>
-<p>目前大量的研究表明，在大规模预料上训练的模型，可以避免从头开始训练一个新的模型，对于文本分类以及其他的NLP任务是有帮助的。一种预训练模式是word embeddings，比如word2vec、GloVe，或者是contextualized word embeddings，比如Cove和ELMo。另一种预训练模型是橘子级别的，Howard和Ruder提出了ULMFiT，一种对预训练模型的fine-tuning方法，在6个广泛研究的文本分类数据集中取得了SOTA的结果。最近，预训练模型被证明是有用的在学习common language representations方面，通过利用大规模未标注的预料。例如Open AI的GPT和BERT。BERT基于多层双向Transformer，在masked word prediction和next sentence prediction tasks使用plain text进行训练。</p>
-<p>虽然BERT在许多自然语言理解任务中取得了惊人的成绩，它的潜力还没有被完整的发掘。目前几乎没有对增强BERT在目标任务表现取得更进一步的研究。</p>
-<p>在这篇文中中，我们探索了如何在文本分类任务中最大化的利用BERT。我们探索了一些对BERT进行fine-tuning的方法来增强其在文本人类任务中的表现，我们设计了详尽的实验来对BERT进行详细的分析。</p>
-<p>这篇论文的贡献如下：</p>
-<ul>
-<li>我们提出了一个通用的对BERT进行fine-tuning的方案，包含三个步骤：（1）继续在within-task training data或者in-domain data上预训练BERT。（2）可选的使用多任务学习来fine-tuning BERT如果存在一些可行的相关任务。（3）在目标任务上进行fine-tuning</li>
-<li>我们也探索了不同的BERT在目标任务上的fine-tuning方法，包括对长文本进行预处理，层选择，层尺度的学习率，灾难性遗忘问题（catastrophic foggetting）和小样本学习问题（low-shot learning problems）</li>
-<li>我们在7个广泛研究的英文文本分类数据集和1个中文新闻类别数据集中取得了SOTA的结果。</li>
-</ul>
-<h2 id="相关工作">相关工作</h2>
-<p>借鉴从其他任务学习的知识在NLP领域越来越热门。这里主要回顾两个相关的方法：<strong>预训练语言模型</strong>和<strong>多任务学习</strong></p>
-<h3 id="预训练语言模型">预训练语言模型</h3>
-<p>预训练此响亮，最为一个现代NLP系统的重要组成部分，相比从头进行训练，可以带来大量的提升。作为词向量的拓展，句向量、段向量，也在下游的任务中被作为特称而广泛使用。</p>
-<p>最近，在大的网络上面使用大规模的未标注数据进行预训练，然后在下游的任务上进行fine-tuning已经在一些自然语言理解的任务上取得了突破，比如GPT和BERT。</p>
-<p>在本文中，我们将进一步探索BERT在文本分类任务上的fine-tuning方法。</p>
-<h3 id="多任务学习">多任务学习</h3>
-<p>多任务学习是另一个相关的方向。Rei（2017）和Liu et al.（2018）使用多任务学习的方法来联合的训练住任务和语言模型。Liu et al.(2019)扩展了MT-DNN模型通过加入BERT作为它的共享的text encoding层。MTL要求训练任务每次从头开始，非常的低效并且要求仔细的对任务进行调参。然而，使用多任务学习将BERT进行fine-tuning可以通过使用共享的预训练模型来避免这个问题。</p>
-<h2 id="使用bert进行文本分类">使用BERT进行文本分类</h2>
-<p>BERT的输入不超过512 tokens，输出句子的表示。输入的句子有一个活着两个部分，第一个token是[CLS]标签，是整个句子的表示，还有一个[SEP]标签，用来分隔句子。</p>
-<p>对于文本分类任务，BERT使用最后一层的[CLS] token的隐藏层来作为整个句子的代表，通过使用softmax来预测句子属于类别 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>c</mi></mrow><annotation encoding="application/x-tex">c</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">c</span></span></span></span> 的概率</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable side="right"><mlabeledtr><mtd><mtext>(1)</mtext></mtd><mtd><mrow><mi>p</mi><mo>(</mo><mi>c</mi><mi mathvariant="normal">∣</mi><mi mathvariant="bold">h</mi><mo>)</mo><mo>=</mo><mi mathvariant="normal">softmax</mi><mo>⁡</mo><mo>(</mo><mi>W</mi><mi mathvariant="bold">h</mi><mo>)</mo></mrow></mtd></mlabeledtr></mtable><annotation encoding="application/x-tex">p(c | \mathbf{h})=\operatorname{softmax}(W \mathbf{h}) \tag{1}
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault">c</span><span class="mord">∣</span><span class="mord"><span class="mord mathbf">h</span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop"><span class="mord mathrm">s</span><span class="mord mathrm">o</span><span class="mord mathrm" style="margin-right:0.07778em;">f</span><span class="mord mathrm">t</span><span class="mord mathrm">m</span><span class="mord mathrm">a</span><span class="mord mathrm">x</span></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span><span class="mord"><span class="mord mathbf">h</span></span><span class="mclose">)</span></span><span class="tag"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">1</span></span><span class="mord">)</span></span></span></span></span></span></p>
-<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>W</mi></mrow><annotation encoding="application/x-tex">W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span></span></span></span> 是任务特定的参数矩阵。我们通过最大化正确标签的log-probability来同时fine-tuning所有的BERT参数和<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>W</mi></mrow><annotation encoding="application/x-tex">W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">W</span></span></span></span></p>
-<h2 id="方法">方法</h2>
-<p>在这篇文章中，我们使用一下三种方法来寻找合适的fine-tuning方法。</p>
-<ol>
-<li><strong>Fine-Tuning 策略</strong>：当我们fine-tune BERT的时候，有许多方法来利用BERT。比如，BERT不同的层捕获到不同级别的语法语义方面的信息，哪一层对目标任务最有效？怎样选择更好的优化算法和学习率？</li>
-<li><strong>进一步预训练</strong>：BERT是在通用领域被预训练的，和目标领域的数据有着不同的分布。一个自然的想法是在目标领域进一步预训练BERT。</li>
-<li><strong>多任务FineTuning</strong>：在不使用预训练模型的时候，多任务学习在使用不同任务之间的共享知识方面有着效果。当在同一目标领域有着多个任务的时候，同时在这多个任务上fine-tune BERT是否仍然有效？</li>
-</ol>
-<p>fine-tuning BERT的通用方法见图1。<br>
-<img src="https://kesblog.github.io/post-images/1566821412795.png" alt=""></p>
-<h3 id="fine-tuning-策略">Fine-Tuning 策略</h3>
-<p>神经网络不同的层可以捕获不同级别的语法语义的信息。</p>
-<p>为了将BERT使用在特定任务上，我们需要考虑一下因素：</p>
-<ol>
-<li>对 <strong>长文本</strong> 的预处理，因为BERT的最大输入是512</li>
-<li>层次选择。官方的BERT-base模型包含了一个embedding layer，12层的encoder和一个pooling layer。我们需要选择对于文本分类任务最有效的层。</li>
-<li>过拟合问题。需要一个好的带有合适学习率optimizer。</li>
-</ol>
-<p>从直觉上来说，BERT模型的低层可能会包含更通用的信息，我们可以对于不同的层使用不同的学习率来进行fine-tuning。</p>
-<p>根据Howard和Ruder(2018)，我们将参数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span></span></span></span> 分成 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>{</mo><msup><mi>θ</mi><mn>1</mn></msup><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msup><mi>θ</mi><mi>L</mi></msup><mo>}</mo></mrow><annotation encoding="application/x-tex">\{\theta^1,…,\theta^L\}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mopen">{</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">L</span></span></span></span></span></span></span></span><span class="mclose">}</span></span></span></span> ，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>θ</mi><mi>l</mi></msup></mrow><annotation encoding="application/x-tex">\theta^l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.849108em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.01968em;">l</span></span></span></span></span></span></span></span></span></span></span> 包含着BERT第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 层的参数。然后参数按照以下方式进行更新。</p>
-<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable side="right"><mlabeledtr><mtd><mtext>(2)</mtext></mtd><mtd><mrow><msubsup><mi>θ</mi><mi>t</mi><mi>l</mi></msubsup><mo>=</mo><msubsup><mi>θ</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow><mi>l</mi></msubsup><mo>−</mo><msup><mi>η</mi><mi>l</mi></msup><mo>⋅</mo><msub><mi mathvariant="normal">∇</mi><msup><mi>θ</mi><mi>l</mi></msup></msub><mi>J</mi><mo>(</mo><mi>θ</mi><mo>)</mo></mrow></mtd></mlabeledtr></mtable><annotation encoding="application/x-tex">\theta_{t}^{l}=\theta_{t-1}^{l}-\eta^{l} \cdot \nabla_{\theta^{l}} J(\theta) \tag{2}
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.146108em;vertical-align:-0.247em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8991079999999998em;"><span style="top:-2.4530000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.204439em;vertical-align:-0.305331em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.899108em;"><span style="top:-2.4530000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.1130000000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.305331em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.093548em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">η</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8991079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.01968em;">l</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord">∇</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.49738em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7820285714285713em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.01968em;">l</span></span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2026199999999999em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.09618em;">J</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span></span><span class="tag"><span class="strut" style="height:1.204439em;vertical-align:-0.305331em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">2</span></span><span class="mord">)</span></span></span></span></span></span></p>
-<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>η</mi><mi>l</mi></msup></mrow><annotation encoding="application/x-tex">\eta^l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.043548em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">η</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.01968em;">l</span></span></span></span></span></span></span></span></span></span></span> 代表第 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span></span></span></span> 层的学习率。</p>
-<p>我们设置基本的学习率为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>η</mi><mi>L</mi></msup></mrow><annotation encoding="application/x-tex">\eta^L</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.035771em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">η</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">L</span></span></span></span></span></span></span></span></span></span></span> ，使用 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>η</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msup><mo>=</mo><mi>ξ</mi><mo>⋅</mo><msup><mi>η</mi><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">\eta^{k-1}=\xi \cdot \eta^{k}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.043548em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">η</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.04601em;">ξ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.043548em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">η</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span></span></span></span></span> ，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ξ</mi></mrow><annotation encoding="application/x-tex">\xi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.04601em;">ξ</span></span></span></span> 是衰退因子，小于或者等于1。当 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ξ</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\xi &lt; 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.04601em;">ξ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> ，低层有着比高层更小的学习率，当 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ξ</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\xi = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.04601em;">ξ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> ，所有的层次有着相同的学习率，此时等同于SGD算法。我们将会在5.3节中探索这些因素。</p>
-<h3 id="进一步预训练">进一步预训练</h3>
-<p>BERT是在通用领域的预料上进行训练的。对于特定领域的文本分类任务来说，比如电影评论，它的数据分布和BERT的非常不同。因此，我们可以使用masked language model和next sentence prediction任务在相关领域数据上对BERT进一步预训练。采用了三种进一步预训练的方法：</p>
-<ol>
-<li><strong>Within-task pre-training</strong>：BERT继续在目标任务的训练集上进一步预训练。</li>
-<li><strong>In-domain pre-training</strong>：预训练数据来自目标任务的相同领域。比如有不同的情感分类任务，它们有着类似的数据分布，我们可以将这些数据集混合在一起之后对BERT进行进一步的预训练。</li>
-<li><strong>Cross-domain pre-training</strong>：预训练数据来自相同和不同领域</li>
-</ol>
-<p>我们将会在5.4节研究这些方法。</p>
-<h3 id="多任务fine-tuning">多任务Fine-Tuning</h3>
-<p>多任务学习是一个有效的方法来分享从不同的监督任务中获得的知识。我们在多任务学习框架中fine-tuning BERT进行文本分类。</p>
-<p>所有的任务共享BERT层和embedding层。唯一不共享的层是最后的分类层，意味着每个任务有着自己的分类层。实验分析见5.5节。</p>
-<h2 id="实验">实验</h2>
-<p>我们探索了对7个英文和1个中文文本分类数据集不同的fine-tuning方法。我们使用uncased BERT-base 模型和中文BERT-base 模型。</p>
-<h3 id="数据集">数据集</h3>
-<p>我们在8个广泛研究的数据集上测试我们的方法。这些数据集有着不同数量的文档和不同长度的文档，覆盖了三个通常的文本分类任务：情感分类，问题分类和话题分类。这些数据集的信息见表1。<br>
-<img src="https://kesblog.github.io/post-images/1566823356633.png" alt=""></p>
-<ul>
-<li><strong>情感分类</strong>：对于情感分析，我们使用了二元电影评论IMDb dataset 和二分类及五分类的Yelp review dataset。</li>
-<li><strong>问题分类</strong>：对于问题分类，我们在六分类的TREC dataset和 Yahoo！Answers dataset上测试我们的方法。TREC dataset是开放领域基于事实的文本分类数据集。相对于其他的文档级别的数据集来说，TREC是句子级别的，样本较少。Yahoo! Answers dataset是一个大的数据集，有着1,400K 的训练样本。</li>
-<li><strong>话题分类</strong>：对于话题分类，使用了大规模的AG's News 和DBPedia数据集。为了测试BERT的中文效果，我们建立了一个中文基于搜狗新闻预料的训练和测试数据集。我们直接使用中文字符而不是拼音。数据由SogouCA 和 SogouCS 新闻整合。我们使用URL来将新闻进行分类，一共有6个类别，体育、房屋、商业、娱乐、女人和科技。每个类别的训练样本为9000，测试样本为1000。</li>
-<li><strong>数据预处理</strong>：使用WordPiece embeddings with 30,000 tokens vocabulary，将分开的word使用 ## 来标记。所以文档的长度数据基于word pieces。对于进一步预训练BERT，我们使用 spaCy来对英文数据集进行句子分割，使用“。”，“？”和“！”来对中文数据进行句子分割。</li>
-</ul>
-<h3 id="超参数">超参数</h3>
-<p>使用BERT-base模型，包含768隐藏单元，12层Transformer和12个self-attention heads。在1块TITAN Xp上对BERT进一步预训练，batch size为32，max sequence length是128，学习率为5e-5，train steps是100,000，warm-up steps是10,000。</p>
-<p>在4块TITAN Xp上对BERT进行fine-tuning，batch size为24，dropout为0.1，使用Adam，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>β</mi><mn>1</mn></msub><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">\beta_1=0.9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">9</span></span></span></span>，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>β</mi><mn>2</mn></msub><mo>=</mo><mn>0.999</mn></mrow><annotation encoding="application/x-tex">\beta_2=0.999</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05278em;">β</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">9</span><span class="mord">9</span><span class="mord">9</span></span></span></span>，使用slanted triangular learning rates(ULMFit)，基学习率为2e-5，warm up portion是0.1。我们经验性的设置epoch为4，将验证集上最好的模型保存进行测试。</p>
-<h3 id="实验-1探索不同fine-tuning策略">实验-1：探索不同Fine-Tuning策略</h3>
-<p>使用IMDb dataset来探索不同的fine-tuning策略。官方的预训练模型为出事的encoder。</p>
-<h4 id="处理长文本">处理长文本</h4>
-<p>BERT的最大输入长度为512，使用一下三种方式来处理长文本。</p>
-<p>#####截断方法</p>
-<ol>
-<li><strong>head-only</strong>：保留前510个tokens</li>
-<li><strong>tail-only</strong>：保留最后510ge tokens</li>
-<li><strong>head+tail</strong>：经验性的选择前128和后382个tokens</li>
-</ol>
-<h5 id="层次方法">层次方法</h5>
-<p>首先将输入文本分成 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>k</mi><mo>=</mo><mi>L</mi><mi mathvariant="normal">/</mi><mn>510</mn></mrow><annotation encoding="application/x-tex">k=L/510</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">L</span><span class="mord">/</span><span class="mord">5</span><span class="mord">1</span><span class="mord">0</span></span></span></span> 个部分，每部分输入BERT得到k个表示，然后将每个表示最后一层的[CLS]对应的隐藏状态，使用mean pooling，max pooling 和 self-attention来将所有部分的表示组合起来。</p>
-<p>表2展示了不同方法的效果。截断方法的<strong>head+tail</strong>效果最好。因此，后续我们将使用该方法处理长文本。<br>
-<img src="https://kesblog.github.io/post-images/1566825039114.png" alt=""></p>
-<h4 id="不同层的特征">不同层的特征</h4>
-<p>不同的层提取输入文本的不同特征，我们探索不同层次特征的效果。然后我们fine-tune模型记录错误率。</p>
-<p>表3展示了fine-tuning BERT不同层的效果。BERT的最后一层特征效果最好。因为我们使用该设置来进行后续的实验。<br>
-<img src="https://kesblog.github.io/post-images/1566825205263.png" alt=""></p>
-<h4 id="灾难性遗忘">灾难性遗忘</h4>
-<p>灾难性遗忘是迁移学习中常见的问题，意味着预先学习的知识在学习新知识的过程中被擦除。我们探索BERT是否受该问题的影响。</p>
-<p>我们fine-tune BERT使用不同的学习率，图2是错误率的学习曲线。<br>
-<img src="https://kesblog.github.io/post-images/1566825344399.png" alt=""></p>
-<p>我们发现在较低的学习率，比如2e-5，对于使BERT克服灾难性遗忘是必须的。随着学习率增长到4e-4，训练收敛失败。</p>
-<h4 id="层次间学习率衰退">层次间学习率衰退</h4>
-<p>表4展示了不同的基学习率和衰退因子的影响。我们发现设置一个较低的学习率在低层上能有效的fine-tune BERT。一个合适的设置是 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>ξ</mi><mo>=</mo><mn>0.95</mn><mi mathvariant="normal">，</mi><mi>l</mi><mi>r</mi><mo>=</mo><mn>2.0</mn><mi>e</mi><mo>−</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">\xi=0.95，lr=2.0e-5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.04601em;">ξ</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">9</span><span class="mord">5</span><span class="mord cjk_fallback">，</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord">.</span><span class="mord">0</span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">5</span></span></span></span>。<br>
-<img src="https://kesblog.github.io/post-images/1566825578280.png" alt=""></p>
-<p>###实验-2：探索进一步预训练</p>
-<p>在本节探索进一步预训练。在以下实验的fine-tuning中，使用实验1中的最佳策略。</p>
-<h4 id="within-task-进一步预训练">Within-Task 进一步预训练</h4>
-<p>我们使用采用不同步骤进一步预训练的模型在目标任务上进一步fine-tuning。</p>
-<p>如图3所示，进一步预训练对于提升BERT在特定任务上的表现是有帮助的。<br>
-<img src="https://kesblog.github.io/post-images/1566825824830.png" alt=""></p>
-<h4 id="in-domain和cross-domain-进一步预训练">In-Domain和Cross-Domain 进一步预训练</h4>
-<p>除了在目标任务的训练集上预训练BERT，我们可以在同一领域的数据上进一步预训练BERT。</p>
-<p>将7个英文数据集划分为3个领域：<strong>话题</strong>、<strong>情感</strong>和<strong>问题</strong>。划分不是严格正确。</p>
-<p>结果在表5中展示。我们发现几乎所有的预训练模型比原始的模型表现的更好。通常来说，in-domain可以带来比within-task更好的表现。在小的句子级别的TREC数据集上，within-task预训练对于表现是有害的，然而in-domain预训练利用了Yah. A. 数据集，因此取得了更好的效果。</p>
-<p>cross-domain预训练没有带来显著的提升。<strong>可能是因为BERT已经在通用领域训练过了。</strong></p>
-<p>我们也发现IMDb和Yelp在情感方面对对方没有帮助，可能是因为电影和食物的评价数据分布有所差异。<br>
-<img src="https://kesblog.github.io/post-images/1566826244139.png" alt=""></p>
-<h4 id="同之前的模型进行比较">同之前的模型进行比较</h4>
-<p>将我们的模型与之前的模型进行对比，有CNN、RNN、HAN以及ULMFiT等等。</p>
-<p>我们使用BERT作为特征进行输入，使用双向带self-attentionLSTM作为输出实现了BERT-Feat模型。BERT-IDPT-Fit对应着表5中的 <em>all sentiment</em>、 <em>all question</em>、<em>all topic</em>，BERT-CDPT-FiT对应着表5的 <em>all</em> 。</p>
-<p>如表6所示，BERT-Feat比除了ULMFiT的其他baseline表现的好。除了比BERT-Feat在DBPedia数据集上表现的差，BERT-Fit 比 BERT-Feat 在其他7个数据集上表现的都好。所有的三个进一步预训练的数据集表现的比BERT-FiT模型更好。<br>
-<img src="https://kesblog.github.io/post-images/1566826721253.png" alt=""></p>
-<h3 id="实验-3多任务fine-tuning">实验-3：多任务Fine-Tuning</h3>
-<p>使用了4个英文数据集（IMDb，Yelp P.，AG，DBP）.</p>
-<p>使用官方的uncased BERT-base参数，进一步在所有的7个英文数据集上进行预训练。为了得到更好的分类效果，在一起fine-tuning之后，使用小的学习率在各自的数据集上进一步fine-tune。</p>
-<p>表7展示了多任务fine-tuning的效果是提升的。但是多任务没有表现出帮助在BERT-CDPT在Yelp P和AG上。多任务学习和cross-domain可能是可以采用的方法，since BERT-CDPT模型已经包含了丰富的领域相关的信息，多任务可能不是那么重要。<br>
-<img src="https://kesblog.github.io/post-images/1566827111901.png" alt=""></p>
-<h3 id="实验-4小样本学习">实验-4：小样本学习</h3>
-<p>预训练模型的一个优点是可以在下游任务上使用小规模的数据。我们测试了BERT-FiT和BERT-ITPT-FiT在不同数量训练集上的效果。我们选择IMDb的子集。结果如图4。<br>
-<img src="https://kesblog.github.io/post-images/1566827238533.png" alt=""></p>
-<p>实验结果说明BERT对小数据集带来了显著的提升。进一步预训练的BERT可以进一步提升效果。</p>
-<h3 id="实验-5在bert-large上进一步预训练">实验-5：在BERT-Large上进一步预训练</h3>
-<p>在本节，我们探索BERT-Large是否与BERT-base有相似的效果。我们进一步预训练BERT-Large模型。使用了Tesla-V 100-PCIE 32G GPU，batch size为24，max sequence length为128，120k training steps。对于特定任务的fine-tuning，我们设置batch size为24，在4块Tesla-V 100-PCIE 32G GPUs上，使用max sequence length为512进行fine-tuning。</p>
-<p>如表8所示，ULMFiT与BERT-base相比，在所有的任务上几乎表现的更好，但是不如BERT-Large。当进一步预训练加入后，BERT-base在所有的任务上超过了ULMFiT，BERT-Large进一步预训练之后fine-tuning取得了SOTA的结果。<br>
-<img src="https://kesblog.github.io/post-images/1566827667443.png" alt=""></p>
-<h2 id="结论">结论</h2>
-<p>我们探索了BERT在文本分类任务上的不同的fine-tuning方法。有以下发现：</p>
-<ol>
-<li>BERT的最顶层对于文本分类任务是最有用的。</li>
-<li>采用合适的层次间降低的学习率，BERT可以克服灾难性遗忘问题。</li>
-<li>Within-task和in-domain进一步预训练可以显著提升分类效果。</li>
-<li>多任务fine-tuning对于单任务的fine-tuning是有帮助的，但是效果没有进一步预训练好。</li>
-<li>BERT可以小规模数据集任务的性能。</li>
-</ol>
-<p>通过以上的发现，我们在8个广泛研究的文本分类数据集上取得了SOTA的成绩。未来，我们将会在BERT是如何工作的方面进行深入探索。</p>
-]]></content>
-    </entry>
-</feed>
+
+        </div>
+
+        
+
+
+        <div class="flex justify-between py-8">
+          
+
+          
+            <div class="next-post">
+              <a href="https://kesblog.github.io/post/entity-relation-extraction-as-multi-turn-question-answering">
+                <h3 class="post-title">
+                  Entity-Relation Extraction as Multi-turn Question Answering
+                  <i class="remixicon-arrow-right-line"></i>
+                </h3>
+              </a>
+            </div>
+          
+        </div>
+
+        
+
+      </div>
+    </div>
+
+    <script src="https://kesblog.github.io/media/prism.js"></script>  
+<script>
+
+Prism.highlightAll()
+
+let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+// This should probably be throttled.
+// Especially because it triggers during smooth scrolling.
+// https://lodash.com/docs/4.17.10#throttle
+// You could do like...
+// window.addEventListener("scroll", () => {
+//    _.throttle(doThatStuff, 100);
+// });
+// Only not doing it here to keep this Pen dependency-free.
+
+window.addEventListener("scroll", event => {
+  let fromTop = window.scrollY;
+
+  mainNavLinks.forEach((link, index) => {
+    let section = document.getElementById(decodeURI(link.hash).substring(1));
+    let nextSection = null
+    if (mainNavLinks[index + 1]) {
+      nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+    }
+    if (section.offsetTop <= fromTop) {
+      if (nextSection) {
+        if (nextSection.offsetTop > fromTop) {
+          link.classList.add("current");
+        } else {
+          link.classList.remove("current");    
+        }
+      } else {
+        link.classList.add("current");
+      }
+    } else {
+      link.classList.remove("current");
+    }
+  });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  var lazyImages = [].slice.call(document.querySelectorAll(".post-feature-image.lazy"));
+
+  if ("IntersectionObserver" in window) {
+    let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          let lazyImage = entry.target
+          lazyImage.style.backgroundImage = `url(${lazyImage.dataset.bg})`
+          lazyImage.classList.remove("lazy")
+          lazyImageObserver.unobserve(lazyImage)
+        }
+      });
+    });
+
+    lazyImages.forEach(function(lazyImage) {
+      lazyImageObserver.observe(lazyImage)
+    })
+  } else {
+    // Possibly fall back to a more compatible method here
+  }
+});
+
+const menuContainer = document.querySelector('.menu-container')
+const menus = document.querySelectorAll('.menu-container .menu')
+const mask = document.querySelector('.mask')
+const contentWrapper = document.querySelector('.content-wrapper')
+const latestArticle = document.querySelector('.latest-article')
+const readMore = document.querySelector('.read-more')
+const indexPage = document.querySelector('.index-page')
+
+const isHome = location.pathname === '/'
+if (latestArticle) {
+  latestArticle.style.display = isHome ? 'block' : 'none'
+  readMore.style.display = isHome ? 'block' : 'none'
+  indexPage.style.display = isHome ? 'none' : 'block'
+}
+
+const openMenu = () => {
+  menuContainer.classList.add('open')
+  menus.forEach(menu => {
+    menu.classList.add('animated', 'fadeInLeft')
+  })
+  mask.classList.add('open')
+  contentWrapper.classList.add('is-second')
+}
+
+const closeMenu = () => {
+  menuContainer.classList.remove('open')
+  menus.forEach(menu => {
+    menu.classList.remove('animated', 'fadeInLeft')
+  })
+  mask.classList.remove('open')
+  contentWrapper.classList.remove('is-second')
+}
+</script>
+  
+  </body>
+</html>
