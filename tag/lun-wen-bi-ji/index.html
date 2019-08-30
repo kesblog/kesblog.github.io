@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>KesBlog</title>
 <meta name="description" content="Every 🐦 has an 🦅's dream." />
-<link rel="shortcut icon" href="https://kesblog.github.io/favicon.ico?v=1567088503155">
+<link rel="shortcut icon" href="https://kesblog.github.io/favicon.ico?v=1567141738686">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
 <link href="https://cdn.remixicon.com/releases/v1.3.1/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
@@ -24,7 +24,7 @@
       <div class="flex lg:block p-4 lg:px-0 items-center fixed lg:static lg:block top-0 right-0 left-0 bg-white z-50">
         <i class="remixicon-menu-2-line lg:mt-4 text-2xl cursor-pointer animated fadeIn" onclick="openMenu()"></i>
         <a href="https://kesblog.github.io">
-          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://kesblog.github.io/images/avatar.png?v=1567088503155" alt="">
+          <img class="animated fadeInLeft avatar rounded-lg mx-4 lg:mt-32 lg:mx-0 mt-0 lg:w-24 lg:h-24 w-12 w-12" src="https://kesblog.github.io/images/avatar.png?v=1567141738686" alt="">
         </a>
         <h1 class="animated fadeInLeft lg:text-4xl font-extrabold lg:mt-8 mt-0 text-xl" style="animation-delay: 0.2s">KesBlog</h1>
       </div>
@@ -105,6 +105,25 @@
         
   <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${0 * 0.2}s` }">
     
+      <a href="https://kesblog.github.io/post/extracting-multiple-relations-in-one-pass-with-pre-trained-transformers" class="feature-image-wrapper bg-gray-100 rounded-lg flex-shrink-0 mr-8 w-full h-56 h-32 md:w-56 md:h-40">
+        <div class="post-feature-image lazy w-full h-56 h-32 md:w-56 md:h-40" data-bg="'https://kesblog.github.io/post-images/extracting-multiple-relations-in-one-pass-with-pre-trained-transformers.png'">
+        </div>
+      </a>
+    
+    <div class="content">
+      <a href="https://kesblog.github.io/post/extracting-multiple-relations-in-one-pass-with-pre-trained-transformers">
+        <h2 class="post-title text-xl font-extrabold mt-5 md:mt-0">Extracting Multiple-Relations in One-Pass with Pre-Trained Transformers</h2>
+      </a>
+      <div class="post-abstract text-gray-700 font-light my-4">
+        <p>目前SOTA的进行多对实体关系抽取的方法要求进行多轮对输入的编码。这篇论文提出了一个新的方案，可以在一轮对输入的编码后完成多个实体关系的抽取，并且在ACE 2005上取得了SOTA的准确率表现。我们的方案构建在预训练的Transformer模型上面。因为我们的方案使用一轮编码来计算出所有的关系，所以可以轻松的一直到大的数据库上，从而在实际应用中更有用。</p>
+
+      </div>
+      <div class="text-gray-400 text-sm font-light">2019-08-29 / 24 min read</div>
+    </div>
+  </section>
+
+  <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${1 * 0.2}s` }">
+    
       <a href="https://kesblog.github.io/post/entity-relation-extraction-as-multi-turn-question-answering" class="feature-image-wrapper bg-gray-100 rounded-lg flex-shrink-0 mr-8 w-full h-56 h-32 md:w-56 md:h-40">
         <div class="post-feature-image lazy w-full h-56 h-32 md:w-56 md:h-40" data-bg="'https://kesblog.github.io/post-images/entity-relation-extraction-as-multi-turn-question-answering.png'">
         </div>
@@ -122,7 +141,7 @@
     </div>
   </section>
 
-  <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${1 * 0.2}s` }">
+  <section class="post-item md:flex pb-12 animated fadeIn" :style="{ 'animation-delay': `${2 * 0.2}s` }">
     
       <a href="https://kesblog.github.io/post/how-to-fine-tune-bert-for-text-classification" class="feature-image-wrapper bg-gray-100 rounded-lg flex-shrink-0 mr-8 w-full h-56 h-32 md:w-56 md:h-40">
         <div class="post-feature-image lazy w-full h-56 h-32 md:w-56 md:h-40" data-bg="'https://kesblog.github.io/post-images/how-to-fine-tune-bert-for-text-classification.png'">
